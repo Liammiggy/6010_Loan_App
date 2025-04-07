@@ -1,0 +1,69 @@
+@import 'tailwindcss';
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+@source '../**/*.blade.php';
+@source '../**/*.js';
+
+@theme {
+    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+        'Segoe UI Symbol', 'Noto Color Emoji';
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Dark mode transitions */
+:root {
+    --transition-duration: 0.3s;
+    --margin-top-timesheet: 100%;
+}
+
+html {
+    @apply antialiased;
+}
+
+html.dark {
+    color-scheme: dark;
+}
+
+/* Smooth transitions for dark mode */
+html * {
+    transition: background-color var(--transition-duration) ease-in-out,
+                border-color var(--transition-duration) ease-in-out,
+                color var(--transition-duration) ease-in-out;
+}
+
+/* Prevent transition on page load */
+.no-transitions * {
+    transition: none !important;
+}
+
+/* Layout styles */
+body {
+    @apply min-h-screen;
+}
+
+/* Sidebar styles */
+.sidebar-transition {
+    @apply transition-all duration-300 ease-in-out;
+}
+
+/* Tooltip styles */
+.tooltip-enter {
+    @apply transition-all duration-200 ease-out;
+}
+
+.tooltip-leave {
+    @apply transition-all duration-150 ease-in;
+}
+
+/* Prevent layout shift during dark mode transition */
+.dark .bg-white {
+    @apply bg-gray-800;
+}
+
+.dark .text-gray-800 {
+    @apply text-white;
+}
