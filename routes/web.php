@@ -16,9 +16,16 @@ Route::get('/loan-applications', [LoanApplicationController::class, 'index'])->n
 Route::get('/loan-types', [LoanTypeController::class, 'index'])->name('loan-types');
 Route::get('/members', [MemberController::class, 'index'])->name('members');
 Route::get('/payments-and-transactions', [PaymentAndTransactionController::class, 'index'])->name('payments-and-transactions');
-Route::get('/user-management', [UserManagementController::class, 'index'])->name('user-management');
+
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::get('/loan-calculator', [LoanCalculatorController::class, 'index'])->name('loan-calculator.index');
+
+Route::controller(UserManagementController::class)->group(function () {
+    Route::get('/user-management', 'index')->name('user-management');
+    Route::get('/user-management/roles', 'roles')->name('user-management.roles');
+    Route::post('/user-management/roles', 'storeRole')->name('user-management.roles.store');
+    Route::post('/user-management/roles/{id}', 'updateRole')->name('user-management.roles.update');
+});
 
 // Route::get('/', function () {
 //     return redirect()->route('login');

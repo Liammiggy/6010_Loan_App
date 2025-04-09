@@ -4,6 +4,10 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 
+use App\Observers\LoanAppObserver;
+
+use App\Models\{Role, User};
+
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -19,6 +23,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        Role::observe(LoanAppObserver::class);
+        User::observe(LoanAppObserver::class);
     }
 }
