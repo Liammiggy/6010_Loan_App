@@ -26,8 +26,8 @@
         const urlParams = new URLSearchParams(window.location.search);
         const activeTab = urlParams.get('tab') || 'users';
         let role_id = null;
+        let user_id = null;
 
-        // Initialize tabs on page load
         document.addEventListener('DOMContentLoaded', function() {
             switchTab(activeTab);
         });
@@ -70,6 +70,8 @@
 
         function openUserModal() {
             document.getElementById('userModal').classList.remove('hidden');
+            document.getElementById('user-modal-title').textContent = 'Add New User';
+            document.getElementById('userForm').reset();
         }
 
         function closeUserModal() {
@@ -77,16 +79,79 @@
         }
 
         function editUser(userId) {
-            // Implement edit user logic
-            openUserModal();
-            // Fetch user data and populate form
+            fetch(`/user-management/users?id=${userId}`)
+                .then(response => response.json())
+                .then(user => {
+                    openUserModal();
+                    document.getElementById('user-modal-title').textContent = 'Edit User';
+                    user_id = userId;
+                    document.getElementById('name').value = user.name;
+                    document.getElementById('email').value = user.email;
+                    document.getElementById('role').value = user.roles[0].id;               
+                })
+                .catch(error => console.error('Error:', error));
         }
 
         function deleteUser(userId) {
             if (confirm('Are you sure you want to delete this user?')) {
-                // Implement delete user logic
+                fetch(`/user-management/users/delete/${userId}`, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                    },
+                })
+                .then(response => {
+                    if (response.ok) {
+                        window.location.reload();
+                    } else {
+                        throw new Error('Failed to delete role');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Failed to delete role. Please try again.');
+                });
             }
         }
+
+        // Handle role form submission
+        document.getElementById('userForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = {
+                name: document.getElementById('name').value,
+                email: document.getElementById('email').value,
+                role_id: document.getElementById('role').value,
+            };
+
+            if(document.getElementById('password').value) {
+                formData.password = document.getElementById('password').value;
+            }
+
+            const isEdit = document.getElementById('user-modal-title').textContent === 'Edit User';
+            const url = isEdit ? `/user-management/users/${user_id}` : '/user-management/users';
+            const method = 'POST';
+
+            fetch(url, {
+                method: method,
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => {
+                if (response.ok) {
+                    window.location.reload();
+                } else {
+                    throw new Error('Failed to save role');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Failed to save user. Please try again.');
+            });
+        });
 
         function openRoleModal() {
             document.getElementById('roleModal').classList.remove('hidden');
@@ -122,8 +187,8 @@
 
         function deleteRole(roleId) {
             if (confirm('Are you sure you want to delete this role? This action cannot be undone.')) {
-                fetch(`/api/roles/${roleId}`, {
-                    method: 'DELETE',
+                fetch(`/user-management/roles/delete/${roleId}`, {
+                    method: 'POST',
                     headers: {
                         'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
                     },

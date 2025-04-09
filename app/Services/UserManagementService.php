@@ -2,8 +2,7 @@
 
 namespace App\Services;
 
-use App\Models\User;
-use App\Models\Role;
+use App\Models\{User, Role, Permission};
 
 class UserManagementService extends AbstractService
 {
@@ -14,7 +13,9 @@ class UserManagementService extends AbstractService
 
     public function getUsers(array $filters = [])
     {
-        return $this->all($filters)->get();
+        $this->model = User::class;
+        $this->relations(['roles']);
+        return $this->all($filters)->paginate(10);
     }
 
     public function getRoles(array $filters = [])
@@ -25,19 +26,17 @@ class UserManagementService extends AbstractService
     }
 
     public function getPermissions()
-    {
-        $permissions = \DB::table('permissions')->get();
-        
-        $descriptions = $permissions->pluck('description')->unique();
-
+    { 
+        $permissions = new Permission();
+        $modules = $permissions->getModules();
         $collection = collect([]);
 
-        foreach ($descriptions as $description) {
-            if(empty($collection[$description])) {
-                $collection->put($description, collect([]));
+        foreach ($modules as $module) {
+            if(empty($collection[$module])) {
+                $collection->put($module, collect([]));
             }
-            foreach($permissions->where('description', $description) as $permission) {
-                $collection[$description]->push($permission);
+            foreach($permissions->where('module', $module)->get() as $permission) {
+                $collection[$module]->push($permission);
             }
             
         }
@@ -67,5 +66,41 @@ class UserManagementService extends AbstractService
         $this->model = Role::class; 
         $this->relations(['users', 'permissions']);
         return $this->find($id);
+    }
+
+    public function deleteRole($id)
+    {
+        $role = Role::find($id);
+        $role->delete();
+        return $role;
+    }
+
+    public function getUser($id)
+    {
+        $this->model = User::class;
+        $this->relations(['roles']);
+        return $this->find($id);
+    }   
+
+    public function storeUser(array $data)
+    {   
+        $user = User::create($data);
+        $user->roles()->attach($data['role_id']);
+        return $user;
+    }
+
+    public function updateUser(array $data, $id)
+    {
+        $user = User::find($id);
+        $user->update($data);
+        $user->roles()->sync($data['role_id']);
+        return $user;
+    }   
+
+    public function deleteUser($id)
+    {
+        $user = User::find($id);
+        $user->delete();
+        return $user;
     }
 }

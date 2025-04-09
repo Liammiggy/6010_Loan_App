@@ -5,6 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    
+    @if(Session::has('toast'))
+        <meta name="toast-data" content="{{ json_encode(Session::get('toast')) }}">
+    @endif
 
     <title>{{ config('app.name', 'Loan Management System') }}</title>
 
@@ -20,7 +24,7 @@
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
 
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @vite(['resources/css/app.css', 'resources/js/app.js', 'resources/js/toast.js'])
     <script src="{{ asset('js/pwa.js') }}" defer></script>
 </head>
 <body class="h-full bg-gray-100">

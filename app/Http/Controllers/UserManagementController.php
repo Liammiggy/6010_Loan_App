@@ -54,7 +54,10 @@ class UserManagementController extends Controller
             ], 422);
 
         $this->service->storeRole($request->all());
-        return redirect()->route('user-management')->with('success', 'Role created successfully'); 
+        return redirect()->route('user-management')->with('toast', [
+            'type' => 'success',
+            'message' => 'Role created successfully'
+        ]); 
     }
 
     public function updateRole(Request $request, $id)
@@ -66,6 +69,84 @@ class UserManagementController extends Controller
         ]);
 
         $this->service->updateRole($request->all(), $id);
-        return redirect()->route('user-management')->with('success', 'Role updated successfully');
+        return redirect()->route('user-management')->with('toast', [
+            'type' => 'success',
+            'message' => 'Role updated successfully'
+        ]);
     }
+
+    public function deleteRole($id)
+    {
+        $this->service->deleteRole($id);
+        return redirect()->route('user-management')->with('toast', [
+            'type' => 'success',
+            'message' => 'Role deleted successfully'
+        ]);
+    }
+
+    public function users(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'id' => 'required|integer',
+        ]);
+
+        if($validator->fails()) 
+            return response()->json([
+                'errors' => $validator->errors()
+            ], 422);
+
+        $user = $this->service->getUser($request->id);
+        return response()->json($user);
+    }
+
+    public function storeUser(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users',
+            'password' => 'required|string|min:8',
+            'role_id' => 'required|integer',
+        ]);
+
+        if($validator->fails()) 
+            return response()->json([
+                'errors' => $validator->errors()
+            ], 422);
+
+        $this->service->storeUser($request->all());
+        return redirect()->route('user-management')->with('toast', [
+            'type' => 'success',
+            'message' => 'User created successfully'
+        ]);
+    }
+
+    public function updateUser(Request $request, $id)
+    {
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|max:255',
+            'email' => 'required|email',
+            'role_id' => 'required|integer',
+        ]);
+
+        if($validator->fails()) 
+            return response()->json([
+                'errors' => $validator->errors()
+            ], 422);
+
+        $this->service->updateUser($request->all(), $id);
+        return redirect()->route('user-management')->with('toast', [
+            'type' => 'success',
+            'message' => 'User updated successfully'
+        ]);
+    }
+
+    public function deleteUser($id)
+    {
+        $this->service->deleteUser($id);
+        return redirect()->route('user-management')->with('toast', [
+            'type' => 'success',
+            'message' => 'User deleted successfully'
+        ]);
+    }
+    
 }
