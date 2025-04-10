@@ -13,11 +13,10 @@ use App\Http\Controllers\UserManagementController;
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 Route::get('/disbursements-and-repayments', [DisbursementAndRepaymentController::class, 'index'])->name('disbursements-and-repayments');
 Route::get('/loan-applications', [LoanApplicationController::class, 'index'])->name('loan-applications');
-Route::get('/loan-types', [LoanTypeController::class, 'index'])->name('loan-types');
 Route::get('/members', [MemberController::class, 'index'])->name('members');
 Route::get('/payments-and-transactions', [PaymentAndTransactionController::class, 'index'])->name('payments-and-transactions');
 
-Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+Route::post('/logout', function () { return "logout"; })->name('logout');
 Route::get('/loan-calculator', [LoanCalculatorController::class, 'index'])->name('loan-calculator.index');
 
 Route::controller(UserManagementController::class)->group(function () {
@@ -32,6 +31,9 @@ Route::controller(UserManagementController::class)->group(function () {
     Route::post('/user-management/users/delete/{id}', 'deleteUser')->name('user-management.users.delete');
 });
 
-// Route::get('/', function () {
-//     return redirect()->route('login');
-// });
+Route::controller(LoanTypeController::class)->group(function () {
+    Route::get('/loan-types', 'index')->name('loan-types');
+    Route::post('/loan-types', 'store')->name('loan-types.store');
+    Route::post('/loan-types/{id}', 'update')->name('loan-types.update');
+    Route::post('/loan-types/delete/{id}', 'destroy')->name('loan-types.destroy');
+});
