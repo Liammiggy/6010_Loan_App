@@ -13,7 +13,6 @@ use App\Http\Controllers\UserManagementController;
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 Route::get('/disbursements-and-repayments', [DisbursementAndRepaymentController::class, 'index'])->name('disbursements-and-repayments');
 Route::get('/loan-applications', [LoanApplicationController::class, 'index'])->name('loan-applications');
-Route::get('/members', [MemberController::class, 'index'])->name('members');
 Route::get('/payments-and-transactions', [PaymentAndTransactionController::class, 'index'])->name('payments-and-transactions');
 
 Route::post('/logout', function () { return "logout"; })->name('logout');
@@ -37,3 +36,10 @@ Route::controller(LoanTypeController::class)->group(function () {
     Route::post('/loan-types/{id}', 'update')->name('loan-types.update');
     Route::post('/loan-types/delete/{id}', 'destroy')->name('loan-types.destroy');
 });
+
+Route::controller(MemberController::class)->group(function () {
+    Route::get('/members', 'index')->name('members');
+    Route::post('/members', 'store')->name('members.store');
+    Route::post('/members/{id}', 'update')->name('members.update');
+    Route::post('/members/delete/{id}', 'destroy')->name('members.destroy');
+}) ;
