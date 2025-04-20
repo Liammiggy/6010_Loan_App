@@ -4,7 +4,6 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DisbursementAndRepaymentController;
 use App\Http\Controllers\LoanApplicationController;
-use App\Http\Controllers\LoanCalculatorController;
 use App\Http\Controllers\LoanTypeController;
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\PaymentAndTransactionController;
@@ -12,11 +11,9 @@ use App\Http\Controllers\UserManagementController;
 
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 Route::get('/disbursements-and-repayments', [DisbursementAndRepaymentController::class, 'index'])->name('disbursements-and-repayments');
-Route::get('/loan-applications', [LoanApplicationController::class, 'index'])->name('loan-applications');
 Route::get('/payments-and-transactions', [PaymentAndTransactionController::class, 'index'])->name('payments-and-transactions');
 
 Route::post('/logout', function () { return "logout"; })->name('logout');
-Route::get('/loan-calculator', [LoanCalculatorController::class, 'index'])->name('loan-calculator.index');
 
 Route::controller(UserManagementController::class)->group(function () {
     Route::get('/user-management', 'index')->name('user-management');
@@ -42,4 +39,12 @@ Route::controller(MemberController::class)->group(function () {
     Route::post('/members', 'store')->name('members.store');
     Route::post('/members/{id}', 'update')->name('members.update');
     Route::post('/members/delete/{id}', 'destroy')->name('members.destroy');
-}) ;
+});
+
+Route::controller(LoanApplicationController::class)->group(function () {
+    Route::get('/loan-applications', 'index')->name('loan-applications');
+    Route::get('/new/loan-applications', 'new')->name('loan-applications.new');
+    Route::get('/view/{application_id}/loan-applications', 'view')->name('loan-applications.view');
+    Route::post('/loan-applications', 'store')->name('loan-applcations.store');
+    Route::post('/loan-applications/{id}', 'update')->name('loan-applications.update');
+});

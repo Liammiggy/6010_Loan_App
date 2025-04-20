@@ -57,26 +57,6 @@
             </div>
         </a>
 
-        <!-- Loan Calculator -->
-        <a href="{{ route('loan-calculator.index') }}" 
-            class="relative flex items-center gap-2 px-3 py-1.5 text-sm text-gray-600 hover:bg-gray-100 rounded-md group {{ request()->routeIs('loan-calculator.*') ? 'bg-neutral-800 text-white' : '' }}" 
-            :class="{ 'justify-center': isCollapsed }">
-            <div class="shrink-0">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <rect x="4" y="2" width="16" height="20" rx="2" ry="2"></rect>
-                    <line x1="8" y1="12" x2="16" y2="12"></line>
-                    <line x1="12" y1="8" x2="12" y2="16"></line>
-                </svg>
-            </div>
-            <span x-show="!isCollapsed" class="whitespace-nowrap">Loan Calculator</span>
-            <div x-show="isCollapsed" class="absolute left-full top-1/2 -translate-y-1/2 ml-4 pl-2 pointer-events-none hidden group-hover:block">
-                <div class="relative">
-                    <div class="absolute left-0 top-1/2 -translate-x-1 -translate-y-1/2 w-2 h-2 bg-gray-800 transform rotate-45"></div>
-                    <div class="bg-gray-800 text-white text-xs rounded-md py-1 px-2 whitespace-nowrap shadow-lg">Loan Calculator</div>
-                </div>
-            </div>
-        </a>
-
         <a href="{{ route('disbursements-and-repayments') }}" 
             class="relative flex items-center gap-2 px-3 py-1.5 text-sm text-gray-600 hover:bg-gray-100 rounded-md group {{ request()->routeIs('disbursements-and-repayments') ? 'bg-neutral-800 text-white' : '' }}" 
             :class="{ 'justify-center': isCollapsed }">
