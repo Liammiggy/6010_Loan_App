@@ -19,5 +19,6 @@ class LoanType extends Model
     protected $casts = [
         'interest_rate' => 'decimal:2',
         'is_active' => 'boolean'
-    ];
+    ];    
+
 } 

@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DisbursementAndRepaymentController;
+use App\Http\Controllers\DisbursementController;
 use App\Http\Controllers\LoanApplicationController;
 use App\Http\Controllers\LoanTypeController;
 use App\Http\Controllers\MemberController;
@@ -13,7 +14,9 @@ Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard
 Route::get('/disbursements-and-repayments', [DisbursementAndRepaymentController::class, 'index'])->name('disbursements-and-repayments');
 Route::get('/payments-and-transactions', [PaymentAndTransactionController::class, 'index'])->name('payments-and-transactions');
 
-Route::post('/logout', function () { return "logout"; })->name('logout');
+Route::post('/logout', function () {
+    return "logout";
+})->name('logout');
 
 Route::controller(UserManagementController::class)->group(function () {
     Route::get('/user-management', 'index')->name('user-management');
@@ -47,4 +50,12 @@ Route::controller(LoanApplicationController::class)->group(function () {
     Route::get('/view/{application_id}/loan-applications', 'view')->name('loan-applications.view');
     Route::post('/loan-applications', 'store')->name('loan-applcations.store');
     Route::post('/loan-applications/{id}', 'update')->name('loan-applications.update');
+});
+
+Route::controller(DisbursementController::class)->group(function () {
+    Route::get('/disbursements/new', 'index')->name('disbursements.index');
+    Route::get('/disbursements/{id}/edit', 'edit')->name('disbursements.edit');
+
+    Route::post('/disbursements', 'store')->name('disbursements.store');
+    Route::post('/disbursements/{id}', 'update')->name('disbursements.update');
 });

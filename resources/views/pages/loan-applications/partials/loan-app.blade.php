@@ -97,6 +97,25 @@
                         </select>
                     </div>
 
+                    <div>
+                        <label for="frequency" class="block text-sm font-medium text-gray-700">Transaction Fee</label>
+                        <input
+                            type="number"
+                            id="transaction_fee"
+                            name="transaction_fee"
+                            @if(!empty($loanApplication['transaction_fee'])) 
+                                value="{{ fmod($loanType['transaction_fee'], 1) == 0
+                                        ? number_format($loanType['transaction_fee'], 0)
+                                        : rtrim(rtrim(number_format($loanType['transaction_fee'], 2, '.', ''), '0'), '.') }}"
+                            @else 
+                                value="0"
+                            @endif
+                            
+                            class="mt-1 block w-full rounded-md border border-gray-300 
+                                shadow-sm py-2 px-3 disabled:bg-gray-100 disabled:text-gray-500 disabled:cursor-not-allowed"
+                        >
+                    </div>
+
                     @if(empty($loanApplication['interest_rate'])) 
                         <button onclick="generateLoan()" disabled type="button"
                             id="generate-loan"
@@ -179,6 +198,7 @@
             const interestRate = parseFloat(document.getElementById('interest').value);
             const term = parseInt(document.getElementById('term').value);
             const frequency = document.getElementById('frequency').value;
+            const transaction_fee = document.getElementById('transaction_fee').value;
 
             const interest = loanAmount * (interestRate / 100);
             const totalDue = loanAmount + interest;
@@ -232,14 +252,6 @@
                 <h3 class="text-lg font-medium text-gray-900 mb-4">Loan Summary</h3>
                 <div class="space-y-2">
                     <div class="flex justify-between">
-                        <span class="text-sm text-gray-600">Release Date:</span>
-                        <span class="text-sm font-medium text-gray-900">${releaseDate.toDateString()}</span>
-                    </div>
-                    <div class="flex justify-between">
-                        <span class="text-sm text-gray-600">Maturity Date:</span>
-                        <span class="text-sm font-medium text-gray-900">${maturityDate.toDateString()}</span>
-                    </div>
-                    <div class="flex justify-between">
                         <span class="text-sm text-gray-600">Loan Amount:</span>
                         <span class="text-sm font-medium text-gray-900">${formatCurrency(loanAmount)}</span>
                     </div>
@@ -258,6 +270,14 @@
                     <div class="flex justify-between">
                         <span class="text-sm text-gray-600">Amortization per Payment:</span>
                         <span class="text-sm font-medium text-gray-900">${formatCurrency(amortization)}</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-sm text-gray-600">Transaction Fee:</span>
+                        <span class="text-sm font-medium text-gray-900">${formatCurrency(transaction_fee)}</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-sm text-gray-600">Disbursement Amount:</span>
+                        <span class="text-sm font-medium text-gray-900">${formatCurrency(loanAmount - transaction_fee)}</span>
                     </div>
                 </div>
 

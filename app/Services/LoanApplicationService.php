@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\Models\{LoanApplication, Member, LoanType};
+use App\Models\{LoanApplication, Member, LoanType, Disbursement};
 
 class LoanApplicationService extends AbstractService
 {
@@ -50,7 +50,14 @@ class LoanApplicationService extends AbstractService
 
     public function update(array $data, $id)
     {
-        return LoanApplication::find($id)->update($data);
+        $loan = LoanApplication::find($id);
+        $loan->update($data);
+
+        // if ($data['status'] === 'approved') {
+        //     return $loan->disbursement()->create(); // Creates the related disbursement with default values
+        // }
+
+        return $loan;
     }
 
     public function delete($id)

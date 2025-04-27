@@ -38,7 +38,11 @@ class LoanApplication extends Model
     }
 
     public function loan_type() {
-        return $this->belongsTo(LoanType::class);
+        return $this->belongsTo(LoanType::class,'loan_type_id', 'id');
+    }
+
+    public function disbursement() {
+        return $this->HasOne(Disbursement::class, 'loan_application_id', 'id');
     }
 
     public function getMemberNameAttribute() {
