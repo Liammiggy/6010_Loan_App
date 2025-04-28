@@ -18,6 +18,7 @@ return new class extends Migration
             $table->timestamp('repayment_date')->comment('Date of repayment');
             $table->unsignedBigInteger('disbursement_id')->comment('Foreign key to disbursements table');
             $table->string('repayment_method')->nullable()->comment('Method of payment (e.g., cash, bank transfer)');
+            $table->string('collector')->nullable()->comment('Name of the person collecting the repayment');
             $table->string('notes')->nullable()->comment('Additional notes about the repayment');
             $table->string('status')->default('pending')->comment('Status of the repayment');
             $table->timestamps();

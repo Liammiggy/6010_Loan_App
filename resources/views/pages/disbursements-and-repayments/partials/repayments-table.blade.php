@@ -44,8 +44,9 @@
                     </td>
                     <td class="px-4 py-2 whitespace-nowrap text-right text-sm font-medium">
                         <button onclick="viewRepayment({{ $repayment['id'] }})" class="text-blue-600 hover:text-blue-900 mr-2 text-sm">View</button>
-                        <button onclick="processRepayment({{ $repayment['id'] }})" class="text-indigo-600 hover:text-indigo-900 mr-2 text-sm">Process</button>
-                        <button onclick="printRepayment({{ $repayment['id'] }})" class="text-gray-600 hover:text-gray-900 text-sm">Print</button>
+                        <button onclick="processRepayment({{ $repayment['id'] }})" @if($repayment['status'] == 'paid') disabled @endif 
+                            class="text-indigo-600 disabled:text-indigo-200 hover:text-indigo-900 mr-2 text-sm">Process</button>
+                        
                     </td>
                 </tr>
                 @endforeach

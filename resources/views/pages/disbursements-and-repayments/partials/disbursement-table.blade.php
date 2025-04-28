@@ -26,9 +26,13 @@
                     </td>
                     <td class="px-4 py-2 whitespace-nowrap">
                         <div class="text-sm text-gray-900"> 
-                            ₱ {{ fmod($disbursement['amount'], 1) == 0
-                                    ? number_format($disbursement['amount'], 0)
-                                    : rtrim(rtrim(number_format($disbursement['amount'], 2, '.', ''), '0'), '.') }}
+                            @php
+                                $amount = $disbursement['amount'] - $disbursement->loan_application->transaction_fee;
+                                $amount = fmod($amount, 1) == 0
+                                    ? number_format($amount, 0)
+                                    : rtrim(rtrim(number_format($amount, 2, '.', ''), '0'), '.')
+                            @endphp
+                            ₱ {{ $amount }}
                         </div>
                     </td>
                     <td class="px-4 py-2 whitespace-nowrap">

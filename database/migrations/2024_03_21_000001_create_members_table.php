@@ -10,12 +10,15 @@ return new class extends Migration
     {
         Schema::create('members', function (Blueprint $table) {
             $table->id();
+            $table->string('member_id')->unique();
             $table->string('name');
             $table->string('email');
             $table->string('phone');
             $table->text('address');
             $table->boolean('is_active')->default(true);
             $table->timestamps();
+
+            $table->index('member_id');
         });
     }
 

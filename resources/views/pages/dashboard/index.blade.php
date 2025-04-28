@@ -16,8 +16,13 @@
                 </div>
                 <div class="ml-4">
                     <h3 class="text-sm font-medium text-gray-500">Total Loans</h3>
-                    <p class="text-2xl font-semibold text-gray-900">₱2,450,000</p>
-                    <p class="text-sm text-green-600">+12.5% from last month</p>
+                    @php
+                        $amount = fmod($totalLoans['total_amount'], 1) == 0
+                            ? number_format($totalLoans['total_amount'], 0)
+                            : rtrim(rtrim(number_format($totalLoans['total_amount'], 2, '.', ''), '0'), '.')
+                    @endphp
+                    <p class="text-2xl font-semibold text-gray-900">₱ {{ $amount }} </p>
+                    <p class="text-sm text-green-600">+{{ $totalLoans['percentage_change'] }}% from last month</p>
                 </div>
             </div>
         </div>
@@ -32,8 +37,14 @@
                 </div>
                 <div class="ml-4">
                     <h3 class="text-sm font-medium text-gray-500">Active Loans</h3>
-                    <p class="text-2xl font-semibold text-gray-900">24</p>
-                    <p class="text-sm text-green-600">+2 from last week</p>
+                    <p class="text-2xl font-semibold text-gray-900">{{ $activeLoans['count'] }}</p>
+                    <p class="text-sm text-green-600">
+                        @if(empty($activeLoans['particulars']))
+                            No new loans
+                        @else
+                            + {{ $activeLoans['new_loans'] }} from {{ $activeLoans['particulars'] }}
+                        @endif
+                    </p>
                 </div>
             </div>
         </div>
@@ -48,8 +59,8 @@
                 </div>
                 <div class="ml-4">
                     <h3 class="text-sm font-medium text-gray-500">Pending Applications</h3>
-                    <p class="text-2xl font-semibold text-gray-900">8</p>
-                    <p class="text-sm text-red-600">+3 new today</p>
+                    <p class="text-2xl font-semibold text-gray-900">{{ $pendingApplications['count'] }}</p>
+                    <p class="text-sm text-red-600">+{{ $pendingApplications['today'] }} new today</p>
                 </div>
             </div>
         </div>
@@ -64,8 +75,13 @@
                 </div>
                 <div class="ml-4">
                     <h3 class="text-sm font-medium text-gray-500">Overdue Payments</h3>
-                    <p class="text-2xl font-semibold text-gray-900">5</p>
-                    <p class="text-sm text-red-600">Total: ₱45,000</p>
+                    <p class="text-2xl font-semibold text-gray-900"> {{ $overDuePayments['count'] }} </p>
+                    @php
+                        $amount = fmod($overDuePayments['sum'], 1) == 0
+                            ? number_format($overDuePayments['sum'], 0)
+                            : rtrim(rtrim(number_format($overDuePayments['sum'], 2, '.', ''), '0'), '.')
+                    @endphp
+                    <p class="text-sm text-red-600">Total: ₱{{ $amount }}</p>
                 </div>
             </div>
         </div>
@@ -162,30 +178,32 @@
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
-                            <tr>
-                                <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-900">John Doe</td>
-                                <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-900">₱4,500</td>
-                                <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-900">Apr 15, 2024</td>
-                                <td class="px-4 py-2 whitespace-nowrap">
-                                    <span class="px-2 py-1 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-800">Pending</span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-900">Jane Smith</td>
-                                <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-900">₱8,500</td>
-                                <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-900">Apr 16, 2024</td>
-                                <td class="px-4 py-2 whitespace-nowrap">
-                                    <span class="px-2 py-1 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-800">Pending</span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-900">Robert Johnson</td>
-                                <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-900">₱3,500</td>
-                                <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-900">Apr 17, 2024</td>
-                                <td class="px-4 py-2 whitespace-nowrap">
-                                    <span class="px-2 py-1 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-800">Pending</span>
-                                </td>
-                            </tr>
+                            @forelse ($upcomingPayments as $payment)
+                                <tr>
+                                    <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-900">{{ $payment->member_name }}</td>
+                                    @php
+                                        $amount = fmod($payment->amount, 1) == 0
+                                            ? number_format($payment->amount, 0)
+                                            : rtrim(rtrim(number_format($payment->amount, 2, '.', ''), '0'), '.')
+                                    @endphp
+                                    <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-900">₱{{ $amount }}</td>
+                                    <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-900">{{ date('M d, Y', strtotime($payment->repayment_date)) }}</td>
+                                    <td class="px-4 py-2 whitespace-nowrap">
+                                        @php
+                                            $statusColors = [
+                                                'approved' => 'bg-green-100 text-green-800',
+                                                'pending' => 'bg-yellow-100 text-yellow-800',
+                                                'canceled' => 'bg-red-100 text-red-800'
+                                            ];
+                                        @endphp
+                                        <span class="px-2 py-1 text-xs font-semibold rounded-full {{$statusColors[$payment['status']]}}">{{ ucwords($payment['status']) }}</span>
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="4" class="px-4 py-2 text-sm text-gray-500 text-center">No upcoming payments</td>
+                                </tr>
+                            @endforelse
                         </tbody>
                     </table>
                 </div>
@@ -207,30 +225,32 @@
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
-                            <tr>
-                                <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-900">John Doe</td>
-                                <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-900">Personal Loan</td>
-                                <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-900">₱50,000</td>
-                                <td class="px-4 py-2 whitespace-nowrap">
-                                    <span class="px-2 py-1 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-800">Pending</span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-900">Jane Smith</td>
-                                <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-900">Business Loan</td>
-                                <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-900">₱200,000</td>
-                                <td class="px-4 py-2 whitespace-nowrap">
-                                    <span class="px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">Approved</span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-900">Robert Johnson</td>
-                                <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-900">Emergency Loan</td>
-                                <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-900">₱20,000</td>
-                                <td class="px-4 py-2 whitespace-nowrap">
-                                    <span class="px-2 py-1 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-800">Pending</span>
-                                </td>
-                            </tr>
+                            @forelse($recentLoanApplications as $application)
+                                <tr>
+                                    <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-900">{{ $application->member_name }}</td>
+                                    <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-900">{{ $application->loan_type_detail }}</td>
+                                    @php
+                                        $amount = fmod($application->amount, 1) == 0
+                                            ? number_format($application->amount, 0)
+                                            : rtrim(rtrim(number_format($application->amount, 2, '.', ''), '0'), '.')
+                                    @endphp
+                                    <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-900">₱{{ $amount }}</td>
+                                    <td class="px-4 py-2 whitespace-nowrap">
+                                        @php
+                                            $statusColors = [
+                                                'approved' => 'bg-green-100 text-green-800',
+                                                'pending' => 'bg-yellow-100 text-yellow-800',
+                                                'canceled' => 'bg-red-100 text-red-800'
+                                            ];
+                                        @endphp
+                                        <span class="px-2 py-1 text-xs font-semibold rounded-full {{ $statusColors[$application['status']] }}">{{ ucwords($application['status']) }}</span>
+                                    </td>
+                                </tr>
+                            @empty  
+                                <tr>
+                                    <td colspan="4" class="px-4 py-2 text-sm text-gray-500 text-center">No recent loan applications</td>
+                                </tr>
+                            @endforelse
                         </tbody>
                     </table>
                 </div>
@@ -241,28 +261,41 @@
 @push('scripts')
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    // Loan Distribution Chart
+    const loanTypes = @json($loanTypes ?? []);
+    const loanDistributionByType = @json($loanDistributionByType ?? []);
+
+    const loanTypeCountMap = loanDistributionByType.reduce((map, item) => {
+        map[item.type] = item.count;
+        return map;
+    }, {});
+
+    const loanCounts = loanTypes.map(type => loanTypeCountMap[type] ?? 0);
+
+    const backgroundColors = [
+        'rgba(59, 130, 246, 0.8)',
+        'rgba(16, 185, 129, 0.8)',
+        'rgba(245, 158, 11, 0.8)',
+        'rgba(139, 92, 246, 0.8)',
+        'rgba(239, 68, 68, 0.8)'
+    ];
+
+    const borderColors = [
+        'rgba(59, 130, 246, 1)',
+        'rgba(16, 185, 129, 1)',
+        'rgba(245, 158, 11, 1)',
+        'rgba(139, 92, 246, 1)',
+        'rgba(239, 68, 68, 1)'
+    ];
+
     const ctx = document.getElementById('loanDistributionChart').getContext('2d');
     const loanDistributionChart = new Chart(ctx, {
         type: 'doughnut',
         data: {
-            labels: ['Personal Loans', 'Business Loans', 'Emergency Loans', 'Education Loans', 'Housing Loans'],
+            labels: loanTypes,
             datasets: [{
-                data: [30, 25, 15, 20, 10],
-                backgroundColor: [
-                    'rgba(59, 130, 246, 0.8)',
-                    'rgba(16, 185, 129, 0.8)',
-                    'rgba(245, 158, 11, 0.8)',
-                    'rgba(139, 92, 246, 0.8)',
-                    'rgba(239, 68, 68, 0.8)'
-                ],
-                borderColor: [
-                    'rgba(59, 130, 246, 1)',
-                    'rgba(16, 185, 129, 1)',
-                    'rgba(245, 158, 11, 1)',
-                    'rgba(139, 92, 246, 1)',
-                    'rgba(239, 68, 68, 1)'
-                ],
+                data: loanCounts,
+                backgroundColor: backgroundColors.slice(0, loanTypes.length),
+                borderColor: borderColors.slice(0, loanTypes.length),
                 borderWidth: 1
             }]
         },

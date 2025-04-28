@@ -16,11 +16,11 @@
     <div class="flex items-center gap-4">
         <div class="flex items-center gap-3">
             <div class="w-10 h-10 rounded-full bg-neutral-800 flex items-center justify-center text-white text-base font-semibold">
-                {{ substr(auth()->user()->profile->last_name ?? 'U', 0, 1) }}
+                {{ substr(auth()->user()->name ?? 'U', 0, 1) }}
             </div>
             <div>
-                <h2 class="text-sm font-semibold text-gray-800">{{ auth()->user()->profile->first_name ?? 'User' }}</h2>
-                <p class="text-xs text-gray-500">{{ auth()->user()->email ?? 'user@example.com' }}</p>
+                <h2 class="text-sm font-semibold text-gray-800">{{ auth()->user()->name ?? 'User' }}</h2>
+                <p class="text-xs text-gray-500">{{ auth()->user()->username ?? 'username' }}</p>
             </div>
         </div>
         <form method="POST" action="{{ route('logout') }}" class="inline-block ml-8">

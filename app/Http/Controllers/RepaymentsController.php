@@ -14,9 +14,12 @@ class RepaymentsController extends Controller
             'repayment_date' => 'required|date',
         ]);
 
+        $data = (array) $request->only(['amount', 'repayment_date','repayment_method', 'collector','notes']);
+        $data['status'] = 'paid';
+        \DB::beginTransaction();
         $repayment = Repayment::findOrFail($id);
-        $repayment->update(['status' => 'paid']);
-
-        return redirect()->route('disbursements-and-repayments.index')->with('success', 'Repayment updated successfully.');
+        $repayment->update($data);
+        \DB::commit();
+        return redirect()->route('disbursements-and-repayments')->with('success', 'Repayment updated successfully.');
     }
 }

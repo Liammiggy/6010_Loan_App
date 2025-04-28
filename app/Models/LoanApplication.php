@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
 
 class LoanApplication extends Model
@@ -30,6 +31,13 @@ class LoanApplication extends Model
             }
 
             $model->application_id = 'APP-' . $year . '-' . str_pad($nextNumber, 5, '0', STR_PAD_LEFT);
+        });
+
+        static::updating(function ($model) {
+            if($model->status == 'approved') {
+                $folderPath = $model->member->member_id . '/' .  $model->application_id;
+                Storage::makeDirectory($folderPath);
+            }
         });
     }
 

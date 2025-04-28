@@ -25,6 +25,10 @@
                     </select>
                 </div>
                 <div class="mb-4">
+                    <label for="collector" class="block text-sm font-medium text-gray-700">Collector</label>
+                    <input type="text" id="collector" name="collector" class="mt-1 border py-2 px-3 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
+                </div>
+                <div class="mb-4">
                     <label for="notes" class="block text-sm font-medium text-gray-700">Notes</label>
                     <textarea id="notes" name="notes" rows="3" class="mt-1 border py-2 px-3 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"></textarea>
                 </div>

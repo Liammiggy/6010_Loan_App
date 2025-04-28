@@ -137,7 +137,7 @@
                 const maturityDate = scheduleDates[scheduleDates.length - 1];
 
                 const interest = selectedLoan.amount * (selectedLoan.interest_rate / 100);
-                const totalDue = selectedLoan.amount + interest;
+                const totalDue = parseFloat(selectedLoan.amount) + interest;
                 const amortization = totalDue / selectedLoan.term;
 
                 let template_disbursement = ``

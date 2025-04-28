@@ -18,7 +18,8 @@ class DisbursementService extends AbstractService
     public function getRepayments(array $filters = []){
         $this->model = Repayment::class;
         $this->relations(['disbursement']);
-        return $this->all($filters)->paginate(10);
+        return $this->all($filters)->where('repayment_date', '<=', now())
+            ->orderBy('repayment_date', 'asc') ->paginate(10);
     }
 
     public function getApprovedLoans() {

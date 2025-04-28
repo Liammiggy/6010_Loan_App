@@ -86,7 +86,7 @@
                     document.getElementById('user-modal-title').textContent = 'Edit User';
                     user_id = userId;
                     document.getElementById('name').value = user.name;
-                    document.getElementById('email').value = user.email;
+                    document.getElementById('username').value = user.username;
                     document.getElementById('role').value = user.roles[0].id;               
                 })
                 .catch(error => console.error('Error:', error));
@@ -120,7 +120,7 @@
             
             const formData = {
                 name: document.getElementById('name').value,
-                email: document.getElementById('email').value,
+                username: document.getElementById('username').value,
                 role_id: document.getElementById('role').value,
             };
 

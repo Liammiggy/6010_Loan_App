@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('name')->nullable();
-            $table->string('email')->unique()->index();
+            $table->string('username')->unique()->index();
             $table->string('password')->nullable();
             $table->string('avatar')->nullable();
             $table->string('phone')->nullable();
@@ -24,7 +24,7 @@ return new class extends Migration
             $table->timestamps();
 
             // Add index for common queries
-            $table->index(['created_at', 'email']);
+            $table->index(['created_at', 'username']);
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {

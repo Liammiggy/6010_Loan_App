@@ -6,7 +6,7 @@ use Illuminate\Support\ServiceProvider;
 
 use App\Observers\LoanAppObserver;
 
-use App\Models\{Role, User, LoanType, Member, LoanApplication, Permission};
+use App\Models\{Role, User, LoanType, Member, LoanApplication, Permission, Disbursement, Repayment};
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -29,5 +29,7 @@ class AppServiceProvider extends ServiceProvider
         Member::observe(LoanAppObserver::class);
         LoanApplication::observe(LoanAppObserver::class);
         Permission::observe(LoanAppObserver::class);
+        Disbursement::observe(LoanAppObserver::class);
+        Repayment::observe(LoanAppObserver::class);
     }
 }

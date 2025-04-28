@@ -10,14 +10,15 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <!-- Input Form -->
                 <div class="space-y-6">
-
                     <div>
                         <label for="loanAmount" class="block text-sm font-medium text-gray-700">Loan Amount (₱)</label>
-                        <input type="number" id="loanAmount" value="3000"
+                        <input type="number" id="loanAmount"
                             name="amount" 
                             @if(!empty($loanApplication)) 
                                 value="{{ $loanApplication['amount'] }}" 
                                 disabled
+                            @else
+                                value="3000"
                             @endif
                             class="mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 py-2 px-3 focus:ring-indigo-500
                             disabled:bg-gray-100 disabled:text-gray-500 disabled:cursor-not-allowed">
@@ -104,9 +105,10 @@
                             id="transaction_fee"
                             name="transaction_fee"
                             @if(!empty($loanApplication['transaction_fee'])) 
-                                value="{{ fmod($loanType['transaction_fee'], 1) == 0
-                                        ? number_format($loanType['transaction_fee'], 0)
-                                        : rtrim(rtrim(number_format($loanType['transaction_fee'], 2, '.', ''), '0'), '.') }}"
+                                value="{{ fmod($loanApplication['transaction_fee'], 1) == 0
+                                        ? number_format($loanApplication['transaction_fee'], 0)
+                                        : rtrim(rtrim(number_format($loanApplication['transaction_fee'], 2, '.', ''), '0'), '.') }}"
+                                disabled
                             @else 
                                 value="0"
                             @endif

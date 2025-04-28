@@ -144,7 +144,7 @@
                     document.getElementById('viewRepaymentDueDate').textContent = new Date(repayment.due_date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
                     document.getElementById('viewRepaymentDate').textContent = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }); // Dummy date
                     document.getElementById('viewRepaymentMethod').textContent = 'Bank Transfer';
-                    document.getElementById('viewRepaymentStatus').textContent = repayment.status;
+                    document.getElementById('viewRepaymentStatus').textContent = repayment.status.charAt(0).toUpperCase() + repayment.status.slice(1);
                     document.getElementById('viewRepaymentNotes').textContent = 'No additional notes'; 
                     document.getElementById('viewRepaymentModal').classList.remove('hidden');
                 }
@@ -173,12 +173,31 @@
                 e.preventDefault();
                 const formData = {
                     amount: document.getElementById('amount').value,
-                    date: document.getElementById('repayment_date').value,
-                    method: document.getElementById('repayment_method').value,
+                    repayment_date: document.getElementById('repayment_date').value,
+                    repayment_method: document.getElementById('repayment_method').value,
+                    collector: document.getElementById('collector').value,
                     notes: document.getElementById('notes').value
                 };
-                console.log('Repayment form submitted:', formData);
-                closeRepaymentModal();
+                fetch(`/repayments/${document.getElementById('id').value}`, {
+                    method: "POST",
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                    },
+                    body: JSON.stringify(formData)
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Failed to save disbursement');
+                    } else {
+                        closeRepaymentModal();
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Failed to save disbursement. Please try again.');
+                });
+                
             });
 
         </script>

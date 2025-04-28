@@ -32,6 +32,10 @@ class Disbursement extends Model
         });
     }
 
+    public function repayments() {
+        return $this->hasMany(Repayment::class, 'disbursement_id', 'id');
+    }
+
     public function loan_application() {
         return $this->belongsTo(LoanApplication::class, 'loan_application_id', 'id');
     }

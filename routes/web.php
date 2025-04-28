@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DisbursementAndRepaymentController;
 use App\Http\Controllers\DisbursementController;
@@ -8,54 +9,70 @@ use App\Http\Controllers\LoanApplicationController;
 use App\Http\Controllers\LoanTypeController;
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\PaymentAndTransactionController;
+use App\Http\Controllers\RepaymentsController;
 use App\Http\Controllers\UserManagementController;
 
-Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-Route::get('/disbursements-and-repayments', [DisbursementAndRepaymentController::class, 'index'])->name('disbursements-and-repayments');
-Route::get('/payments-and-transactions', [PaymentAndTransactionController::class, 'index'])->name('payments-and-transactions');
+Route::middleware(['auth'])->group(function () {
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/disbursements-and-repayments', [DisbursementAndRepaymentController::class, 'index'])->name('disbursements-and-repayments');
+    Route::get('/payments-and-transactions', [PaymentAndTransactionController::class, 'index'])->name('payments-and-transactions');
 
-Route::post('/logout', function () {
-    return "logout";
-})->name('logout');
+    Route::controller(UserManagementController::class)->group(function () {
+        Route::get('/user-management', 'index')->name('user-management');
+        Route::get('/user-management/roles', 'roles')->name('user-management.roles');
+        Route::post('/user-management/roles', 'storeRole')->name('user-management.roles.store');
+        Route::post('/user-management/roles/{id}', 'updateRole')->name('user-management.roles.update');
+        Route::post('/user-management/roles/delete/{id}', 'deleteRole')->name('user-management.roles.delete');
+        Route::get('/user-management/users', 'users')->name('user-management.users');
+        Route::post('/user-management/users', 'storeUser')->name('user-management.users.store');
+        Route::post('/user-management/users/{id}', 'updateUser')->name('user-management.users.update');
+        Route::post('/user-management/users/delete/{id}', 'deleteUser')->name('user-management.users.delete');
+    });
 
-Route::controller(UserManagementController::class)->group(function () {
-    Route::get('/user-management', 'index')->name('user-management');
-    Route::get('/user-management/roles', 'roles')->name('user-management.roles');
-    Route::post('/user-management/roles', 'storeRole')->name('user-management.roles.store');
-    Route::post('/user-management/roles/{id}', 'updateRole')->name('user-management.roles.update');
-    Route::post('/user-management/roles/delete/{id}', 'deleteRole')->name('user-management.roles.delete');
-    Route::get('/user-management/users', 'users')->name('user-management.users');
-    Route::post('/user-management/users', 'storeUser')->name('user-management.users.store');
-    Route::post('/user-management/users/{id}', 'updateUser')->name('user-management.users.update');
-    Route::post('/user-management/users/delete/{id}', 'deleteUser')->name('user-management.users.delete');
+    Route::controller(LoanTypeController::class)->group(function () {
+        Route::get('/loan-types', 'index')->name('loan-types');
+        Route::post('/loan-types', 'store')->name('loan-types.store');
+        Route::post('/loan-types/{id}', 'update')->name('loan-types.update');
+        Route::post('/loan-types/delete/{id}', 'destroy')->name('loan-types.destroy');
+    });
+
+    Route::controller(MemberController::class)->group(function () {
+        Route::get('/members', 'index')->name('members');
+        Route::post('/members', 'store')->name('members.store');
+        Route::post('/members/{id}', 'update')->name('members.update');
+        Route::post('/members/delete/{id}', 'destroy')->name('members.destroy');
+    });
+
+    Route::controller(LoanApplicationController::class)->group(function () {
+        Route::get('/loan-applications', 'index')->name('loan-applications');
+        Route::get('/new/loan-applications', 'new')->name('loan-applications.new');
+        Route::get('/view/{application_id}/loan-applications', 'view')->name('loan-applications.view');
+        Route::post('/loan-applications', 'store')->name('loan-applcations.store');
+        Route::post('/loan-applications/{id}', 'update')->name('loan-applications.update');
+    });
+
+    Route::controller(DisbursementController::class)->group(function () {
+        Route::get('/disbursements/new', 'index')->name('disbursements.index');
+        Route::get('/disbursements/{id}/edit', 'edit')->name('disbursements.edit');
+
+        Route::post('/disbursements', 'store')->name('disbursements.store');
+        Route::post('/disbursements/{id}', 'update')->name('disbursements.update');
+    });
+
+    Route::controller(LoginController::class)->group(function () {
+        Route::post('/logout', 'logout')->name('logout');
+    });
+
+    Route::controller(RepaymentsController::class)->group(function () {
+        Route::post('/repayments/{id}', 'update')->name('repayments.update');
+    });
+
 });
 
-Route::controller(LoanTypeController::class)->group(function () {
-    Route::get('/loan-types', 'index')->name('loan-types');
-    Route::post('/loan-types', 'store')->name('loan-types.store');
-    Route::post('/loan-types/{id}', 'update')->name('loan-types.update');
-    Route::post('/loan-types/delete/{id}', 'destroy')->name('loan-types.destroy');
+
+Route::controller(LoginController::class)->group(function () {
+    Route::get('/',  'index')->name('loan-app');
+    Route::get('/login',  'index')->name('login');
+    Route::post('/login', 'login')->name('login.post');
 });
 
-Route::controller(MemberController::class)->group(function () {
-    Route::get('/members', 'index')->name('members');
-    Route::post('/members', 'store')->name('members.store');
-    Route::post('/members/{id}', 'update')->name('members.update');
-    Route::post('/members/delete/{id}', 'destroy')->name('members.destroy');
-});
-
-Route::controller(LoanApplicationController::class)->group(function () {
-    Route::get('/loan-applications', 'index')->name('loan-applications');
-    Route::get('/new/loan-applications', 'new')->name('loan-applications.new');
-    Route::get('/view/{application_id}/loan-applications', 'view')->name('loan-applications.view');
-    Route::post('/loan-applications', 'store')->name('loan-applcations.store');
-    Route::post('/loan-applications/{id}', 'update')->name('loan-applications.update');
-});
-
-Route::controller(DisbursementController::class)->group(function () {
-    Route::get('/disbursements/new', 'index')->name('disbursements.index');
-    Route::get('/disbursements/{id}/edit', 'edit')->name('disbursements.edit');
-
-    Route::post('/disbursements', 'store')->name('disbursements.store');
-    Route::post('/disbursements/{id}', 'update')->name('disbursements.update');
-});

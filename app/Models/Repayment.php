@@ -15,10 +15,6 @@ class Repayment extends Model
     protected static function boot()
     {
         parent::boot();
-        
-        static::addGlobalScope('pastDue', function (Builder $builder) {
-            $builder->where('repayment_date', '<=', now());
-        });
 
         static::creating(function ($model) {
             $year = Carbon::now()->year;
@@ -48,6 +44,11 @@ class Repayment extends Model
 
     public function getLoanTypeAttribute() {
         return $this->disbursement->loan_application->loan_type->name ?? "";
+    }
+
+    public function getStatusAttribute($value)
+    {
+        return $value == 'pending' && date('Y-m-d', strtotime($this->repayment_date)) < date('Y-m-d') ? 'overdue' : $value;
     }
 
     public function getAmountAttribute($value)

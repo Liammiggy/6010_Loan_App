@@ -40,7 +40,7 @@ class LoanApplicationService extends AbstractService
 
     public function create(array $data, $id)
     {
-        $allowed = ['loan_type_id', 'interest_rate', 'amount', 'term', 'frequency'];
+        $allowed = ['loan_type_id', 'interest_rate', 'amount', 'term', 'frequency','transaction_fee'];
         $data = array_intersect_key($data, array_flip($allowed));
         $data['member_id'] = $id;
         $data['status'] = 'pending';
