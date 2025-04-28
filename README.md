@@ -39,8 +39,6 @@ Navigate to the web root directory and run the following commands
 
 ### composer install
 ### cp .env.example .env
-### cp .env.example .env
-### cp .env.example .env
 ### php artisan migrate / php artisan migrate:fresh 
 ### php artisan db:seed
 ### php artisan key:generate
