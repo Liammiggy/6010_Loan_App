@@ -117,7 +117,7 @@
             </div>
         </a>
 
-        <a href="{{ route('payments-and-transactions') }}" 
+        {{-- <a href="{{ route('payments-and-transactions') }}" 
             class="relative flex items-center gap-2 px-3 py-1.5 text-sm text-gray-600 hover:bg-gray-100 rounded-md group {{ request()->routeIs('payments-and-transactions') ? 'bg-neutral-800 text-white' : '' }}" 
             :class="{ 'justify-center': isCollapsed }">
             <div class="shrink-0">
@@ -130,7 +130,7 @@
                     <div class="bg-gray-800 text-white text-xs rounded-md py-1 px-2 whitespace-nowrap shadow-lg">Payments and Transactions</div>
                 </div>
             </div>
-        </a>
+        </a> --}}
 
         <a href="{{ route('user-management') }}" 
             class="relative flex items-center gap-2 px-3 py-1.5 text-sm text-gray-600 hover:bg-gray-100 rounded-md group {{ request()->routeIs('user-management') ? 'bg-neutral-800 text-white' : '' }}" 

@@ -10,7 +10,7 @@
                 </div>
                 <div class="mb-4">
                     <label for="amount" class="block text-sm font-medium text-gray-700">Amount (₱)</label>
-                    <input type="number" id="amount" name="amount" class="mt-1 border py-2 px-3 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
+                    <input type="number" id="amount" step="any" name="amount" class="mt-1 border py-2 px-3 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
                 </div>
                 <div class="mb-4">
                     <label for="repayment_date" class="block text-sm font-medium text-gray-700">Payment Date</label>
