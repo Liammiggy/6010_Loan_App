@@ -3,12 +3,12 @@
 @section('content')
     @php
         $title = 'Disbursements and Repayments';
-        if(auth()->user()->hasPermission('loan_disburse')) {
+        if(auth()->user()->hasPermission('loan_disburse') && auth()->user()->hasPermission('repayment_schedule')) {
+            $title = 'Disbursements and Repayments';
+        } elseif(auth()->user()->hasPermission('loan_disburse')) {
             $title = 'Disbursements';
         } elseif(auth()->user()->hasPermission('repayment_schedule')) {
             $title = 'Repayments';
-        } else {
-            $title = 'Disbursements and Repayments';
         }
         
     @endphp
