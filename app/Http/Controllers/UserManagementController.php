@@ -54,11 +54,10 @@ class UserManagementController extends Controller
             ], 422);
 
         $this->service->storeRole($request->all());
-        return redirect()->route('user-management')->with('toast', [
-            'type' => 'success',
-            'message' => 'Role created successfully'
-        ]); 
+        session()->flash('toast', ['type' => 'success', 'message' => 'Role created successfully']);
+        return response()->json([], 200);
     }
+    
 
     public function updateRole(Request $request, $id)
     {
@@ -69,19 +68,15 @@ class UserManagementController extends Controller
         ]);
 
         $this->service->updateRole($request->all(), $id);
-        return redirect()->route('user-management')->with('toast', [
-            'type' => 'success',
-            'message' => 'Role updated successfully'
-        ]);
+        session()->flash('toast', ['type' => 'success', 'message' => 'Role updated successfully']);
+        return response()->json([], 200);
     }
 
     public function deleteRole($id)
     {
         $this->service->deleteRole($id);
-        return redirect()->route('user-management')->with('toast', [
-            'type' => 'success',
-            'message' => 'Role deleted successfully'
-        ]);
+        session()->flash('toast', ['type' => 'success', 'message' => 'Role deleted successfully']);
+        return response()->json([], 200);
     }
 
     public function users(Request $request)
@@ -114,10 +109,8 @@ class UserManagementController extends Controller
             ], 422);
 
         $this->service->storeUser($request->all());
-        return redirect()->route('user-management')->with('toast', [
-            'type' => 'success',
-            'message' => 'User created successfully'
-        ]);
+        session()->flash('toast', ['type' => 'success', 'message' => 'User created successfully']);
+        return response()->json([], 200);
     }
 
     public function updateUser(Request $request, $id)
@@ -134,19 +127,15 @@ class UserManagementController extends Controller
             ], 422);
 
         $this->service->updateUser($request->all(), $id);
-        return redirect()->route('user-management')->with('toast', [
-            'type' => 'success',
-            'message' => 'User updated successfully'
-        ]);
+        session()->flash('toast', ['type' => 'success', 'message' => 'User updated successfully']);
+        return response()->json([], 200);
     }
 
     public function deleteUser($id)
     {
         $this->service->deleteUser($id);
-        return redirect()->route('user-management')->with('toast', [
-            'type' => 'success',
-            'message' => 'User deleted successfully'
-        ]);
+        session()->flash('toast', ['type' => 'success', 'message' => 'User deleted successfully']);
+        return response()->json([], 200);
     }
     
 }

@@ -93,25 +93,39 @@
         }
 
         function deleteUser(userId) {
-            if (confirm('Are you sure you want to delete this user?')) {
-                fetch(`/user-management/users/delete/${userId}`, {
-                    method: 'POST',
-                    headers: {
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-                    },
-                })
-                .then(response => {
-                    if (response.ok) {
-                        window.location.reload();
-                    } else {
-                        throw new Error('Failed to delete role');
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('Failed to delete role. Please try again.');
-                });
-            }
+            showAlert({
+                title: 'Delete User',
+                message: 'Are you sure you want to delete this user? This action cannot be undone.',
+                confirmText: 'Delete',
+                cancelText: 'Cancel',
+                onConfirm: function() {
+                    fetch(`/user-management/users/delete/${userId}`, {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                        },
+                    })
+                    .then(response => {
+                        if (response.ok) {
+                            window.location.reload();
+                        } else {
+                            throw new Error('Failed to delete user');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        showAlert({
+                            title: 'Error',
+                            message: 'Failed to delete user. Please try again.',
+                            confirmText: 'OK',
+                            cancelText: null,
+                            onConfirm: function() {
+                                closeAlert();
+                            }
+                        });
+                    });
+                }
+            });
         }
 
         // Handle role form submission
@@ -186,25 +200,39 @@
         }
 
         function deleteRole(roleId) {
-            if (confirm('Are you sure you want to delete this role? This action cannot be undone.')) {
-                fetch(`/user-management/roles/delete/${roleId}`, {
-                    method: 'POST',
-                    headers: {
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-                    },
-                })
-                .then(response => {
-                    if (response.ok) {
-                        window.location.reload();
-                    } else {
-                        throw new Error('Failed to delete role');
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('Failed to delete role. Please try again.');
-                });
-            }
+            showAlert({
+                title: 'Delete Role',
+                message: 'Are you sure you want to delete this role? This action cannot be undone.',
+                confirmText: 'Delete',
+                cancelText: 'Cancel',
+                onConfirm: function() {
+                    fetch(`/user-management/roles/delete/${roleId}`, {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                        },
+                    })
+                    .then(response => {
+                        if (response.ok) {
+                            window.location.reload();
+                        } else {
+                            throw new Error('Failed to delete role');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        showAlert({
+                            title: 'Error',
+                            message: 'Failed to delete role. Please try again.',
+                            confirmText: 'OK',
+                            cancelText: null,
+                            onConfirm: function() {
+                                closeAlert();
+                            }
+                        });
+                    });
+                }
+            });
         }
 
         // Handle role form submission

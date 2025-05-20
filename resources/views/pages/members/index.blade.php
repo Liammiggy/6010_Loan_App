@@ -55,10 +55,39 @@
     }
 
     function deleteMember(id) {
-        if (confirm('Are you sure you want to delete this member?')) {
-            console.log('Delete member:', id);
-            // Implement delete functionality
-        }
+        showAlert({
+            title: 'Delete Member',
+            message: 'Are you sure you want to delete this member? This action cannot be undone.',
+            confirmText: 'Delete',
+            cancelText: 'Cancel',
+            onConfirm: function() {
+                fetch(`/members/delete/${id}`, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                    },
+                })
+                .then(response => {
+                    if (response.ok) {
+                        window.location.reload();
+                    } else {
+                        throw new Error('Failed to delete user');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    showAlert({
+                        title: 'Error',
+                        message: 'Failed to delete user. Please try again.',
+                        confirmText: 'OK',
+                        cancelText: null,
+                        onConfirm: function() {
+                            closeAlert();
+                        }
+                    });
+                });
+            }
+        });
     }
 
     // Form Submission
