@@ -38,8 +38,8 @@ class LoanTypeController extends Controller
         }
 
         $this->service->create($request->all());
-
-        return back()->with('toast', ['type' => 'success', 'message' => 'Loan type created successfully']);
+        session()->flash('toast', ['type' => 'success', 'message' => 'Loan type created successfully']);
+        return response()->json([], 200);
 
     }
 
@@ -57,15 +57,15 @@ class LoanTypeController extends Controller
         }
 
         $this->service->update($request->all(), $id);
-
-        return back()->with('toast', ['type' => 'success', 'message' => 'Loan type updated successfully']);
+        session()->flash('toast', ['type' => 'success', 'message' => 'Loan type updated successfully']);
+        return response()->json([], 200);
     }
 
     public function destroy($id)
     {
         $this->service->delete($id);
-
-        return back()->with('toast', ['type' => 'success', 'message' => 'Loan type deleted successfully']);
+        session()->flash('toast', ['type' => 'success', 'message' => 'Loan type deleted successfully']);
+        return response()->json([], 200);
     }
     
 

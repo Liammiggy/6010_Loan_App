@@ -16,8 +16,8 @@
     <meta name="theme-color" content="#4f46e5">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
-    <meta name="apple-mobile-web-app-title" content="LoanMS">
-    <link rel="apple-touch-icon" href="/icons/icon-152x152.png">
+    <meta name="apple-mobile-web-app-title" content="CashAksyon">
+    <link rel="apple-touch-icon" href="/icons/152.webp">
     <link rel="manifest" href="/manifest.json">
 
     <!-- Fonts -->

@@ -1,17 +1,17 @@
-const CACHE_NAME = 'loan-app-v1';
+const CACHE_NAME = 'loan-app-v2';
 const urlsToCache = [
     '/',
     '/css/app.css',
     '/js/app.js',
     '/manifest.json',
-    '/icons/icon-72x72.png',
-    '/icons/icon-96x96.png',
-    '/icons/icon-128x128.png',
-    '/icons/icon-144x144.png',
-    '/icons/icon-152x152.png',
-    '/icons/icon-192x192.png',
-    '/icons/icon-384x384.png',
-    '/icons/icon-512x512.png'
+    '/icons/72.png',
+    '/icons/96.png',
+    '/icons/128.png',
+    '/icons/144.png',
+    '/icons/152.png',
+    '/icons/192.png',
+    '/icons/384.png',
+    '/icons/512.png'
 ];
 
 self.addEventListener('install', event => {
