@@ -63,7 +63,15 @@
             <div class="shrink-0">
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 576 512" fill="currentColor"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--><path d="M64 64C28.7 64 0 92.7 0 128L0 384c0 35.3 28.7 64 64 64l448 0c35.3 0 64-28.7 64-64l0-256c0-35.3-28.7-64-64-64L64 64zm48 160l160 0c8.8 0 16 7.2 16 16s-7.2 16-16 16l-160 0c-8.8 0-16-7.2-16-16s7.2-16 16-16zM96 336c0-8.8 7.2-16 16-16l352 0c8.8 0 16 7.2 16 16s-7.2 16-16 16l-352 0c-8.8 0-16-7.2-16-16zM376 160l80 0c13.3 0 24 10.7 24 24l0 48c0 13.3-10.7 24-24 24l-80 0c-13.3 0-24-10.7-24-24l0-48c0-13.3 10.7-24 24-24z"/></svg>
             </div>
-            <span x-show="!isCollapsed" class="whitespace-nowrap">Disbursements & Repayments</span>
+            <span x-show="!isCollapsed" class="whitespace-nowrap">
+                @if(auth()->user()->hasPermission('loan_disburse') && auth()->user()->hasPermission('repayment_schedule'))
+                    Disbursements & Repayments
+                @elseif(auth()->user()->hasPermission('loan_disburse'))
+                    Disbursements
+                @elseif(auth()->user()->hasPermission('repayment_schedule'))
+                    Repayments
+                @endif
+            </span>
             <div x-show="isCollapsed" class="absolute left-full top-1/2 -translate-y-1/2 ml-4 pl-2 pointer-events-none hidden group-hover:block">
                 <div class="relative">
                     <div class="absolute left-0 top-1/2 -translate-x-1 -translate-y-1/2 w-2 h-2 bg-gray-800 transform rotate-45"></div>
@@ -72,6 +80,7 @@
             </div>
         </a>
         @endif
+        @if(auth()->user()->hasPermission('loan_apps_view'))
         <a href="{{ route('loan-applications') }}" 
             class="relative flex items-center gap-2 px-3 py-1.5 text-sm text-gray-600 hover:bg-gray-100 rounded-md group {{ request()->routeIs('loan-applications') ? 'bg-neutral-800 text-white' : '' }}" 
             :class="{ 'justify-center': isCollapsed }">
@@ -86,7 +95,8 @@
                 </div>
             </div>
         </a>
-
+        @endif
+        @if(auth()->user()->hasPermission('loan_types_view'))
         <a href="{{ route('loan-types') }}" 
             class="relative flex items-center gap-2 px-3 py-1.5 text-sm text-gray-600 hover:bg-gray-100 rounded-md group {{ request()->routeIs('loan-types') ? 'bg-neutral-800 text-white' : '' }}" 
             :class="{ 'justify-center': isCollapsed }">
@@ -101,7 +111,8 @@
                 </div>
             </div>
         </a>
-
+        @endif
+        @if(auth()->user()->hasPermission('members_view'))
         <a href="{{ route('members') }}" 
             class="relative flex items-center gap-2 px-3 py-1.5 text-sm text-gray-600 hover:bg-gray-100 rounded-md group {{ request()->routeIs('members') ? 'bg-neutral-800 text-white' : '' }}" 
             :class="{ 'justify-center': isCollapsed }">
@@ -116,7 +127,7 @@
                 </div>
             </div>
         </a>
-
+        @endif
         {{-- <a href="{{ route('payments-and-transactions') }}" 
             class="relative flex items-center gap-2 px-3 py-1.5 text-sm text-gray-600 hover:bg-gray-100 rounded-md group {{ request()->routeIs('payments-and-transactions') ? 'bg-neutral-800 text-white' : '' }}" 
             :class="{ 'justify-center': isCollapsed }">
@@ -131,7 +142,7 @@
                 </div>
             </div>
         </a> --}}
-
+        @if(auth()->user()->hasPermission('users_view') || auth()->user()->hasPermission('roles_manage'))
         <a href="{{ route('user-management') }}" 
             class="relative flex items-center gap-2 px-3 py-1.5 text-sm text-gray-600 hover:bg-gray-100 rounded-md group {{ request()->routeIs('user-management') ? 'bg-neutral-800 text-white' : '' }}" 
             :class="{ 'justify-center': isCollapsed }">
@@ -146,6 +157,7 @@
                 </div>
             </div>
         </a>
+        @endif
     </nav>
 
     <!-- Bottom Actions -->

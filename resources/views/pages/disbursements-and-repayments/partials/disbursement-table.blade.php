@@ -9,7 +9,9 @@
                     <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
                     <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date Disbursed</th>
                     <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                    @if(auth()->user()->hasPermission('loan_status'))
                     <th class="px-4 py-2 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                    @endif
                 </tr>
             </thead>
             <tbody class="bg-white divide-y divide-gray-200">
@@ -49,9 +51,11 @@
                             {{ $disbursement['status'] == 'approved' ? 'Completed' : 'Canceled' }}
                         </span>
                     </td>
+                    @if(auth()->user()->hasPermission('loan_status'))
                     <td class="px-4 py-2 whitespace-nowrap text-right text-sm font-medium">
                         <a href="{{ route('disbursements.edit', ['id' => $disbursement['id']]) }}" class="text-blue-600 hover:text-blue-900 mr-2 text-sm"> Edit </a>
                     </td>
+                    @endif
                 </tr>
                 @empty
                 <tr>

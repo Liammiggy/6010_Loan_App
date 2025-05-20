@@ -29,18 +29,20 @@ class UserManagementService extends AbstractService
     { 
         $permissions = new Permission();
         $modules = $permissions->getModules();
+        
         $collection = collect([]);
 
-        foreach ($modules as $module) {
+        foreach ($modules as $key =>$module) {
             if(empty($collection[$module])) {
                 $collection->put($module, collect([]));
             }
-            foreach($permissions->where('module', $module)->get() as $permission) {
+
+            foreach($permissions->where('module', $key)->get() as $permission) {
                 $collection[$module]->push($permission);
             }
             
         }
-
+        
         return $collection;
     }
 

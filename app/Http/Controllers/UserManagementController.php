@@ -21,7 +21,7 @@ class UserManagementController extends Controller
         $users = $this->service->getUsers();
         $roles = $this->service->getRoles();
         $permissions = $this->service->getPermissions();
-
+        
         return view('pages.user-management.index', compact('users', 'roles', 'permissions'));
     }
 
