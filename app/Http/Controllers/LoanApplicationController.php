@@ -93,8 +93,8 @@ class LoanApplicationController extends Controller
         }
 
         $this->service->update($request->all(), $id);
-
-        return back()->with('toast', ['type' => 'success', 'message' => 'Loan Application has been ' . $request->status . ' successfully']);
+        session()->flash('toast', ['type' => 'success', 'message' => 'Loan Application has been ' . $request->status . ' successfully']);
+        return response()->json([], 200);
 
     }
 }

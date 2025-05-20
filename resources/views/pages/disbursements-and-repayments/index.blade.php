@@ -191,6 +191,7 @@
                         throw new Error('Failed to save disbursement');
                     } else {
                         closeRepaymentModal();
+                        window.location.reload();
                     }
                 })
                 .catch(error => {

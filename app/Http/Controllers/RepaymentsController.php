@@ -20,6 +20,7 @@ class RepaymentsController extends Controller
         $repayment = Repayment::findOrFail($id);
         $repayment->update($data);
         \DB::commit();
-        return redirect()->route('disbursements-and-repayments')->with('success', 'Repayment updated successfully.');
+        session()->flash('toast', ['type' => 'success', 'message' => 'Repayment updated successfully']);
+        return response()->json([], 200);
     }
 }

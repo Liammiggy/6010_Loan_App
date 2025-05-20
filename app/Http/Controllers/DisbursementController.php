@@ -33,12 +33,14 @@ class DisbursementController extends Controller
     public function store(Request $request)
     {
         $this->service->store($request->all());
+        session()->flash('toast', ['type' => 'success', 'message' => 'Disbursement created successfully']);
         return response()->json([], 200);
     }
 
     public function update(Request $request, $id)
     {
         $this->service->update($request->all(), $id);
+        session()->flash('toast', ['type' => 'success', 'message' => 'Disbursement updated successfully']);
         return response()->json([], 200);
     }
 }
