@@ -182,9 +182,9 @@
                                 <tr>
                                     <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-900">{{ $payment->member_name }}</td>
                                     @php
-                                        $amount = fmod($payment->amount, 1) == 0
-                                            ? number_format($payment->amount, 0)
-                                            : rtrim(rtrim(number_format($payment->amount, 2, '.', ''), '0'), '.')
+                                        $amount = fmod((float)$payment->amount, 1) == 0
+                                            ? number_format((float)$payment->amount, 0)
+                                            : rtrim(rtrim(number_format((float)$payment->amount, 2, '.', ''), '0'), '.')
                                     @endphp
                                     <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-900">₱{{ $amount }}</td>
                                     <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-900">{{ date('M d, Y', strtotime($payment->repayment_date)) }}</td>
