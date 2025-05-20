@@ -56,7 +56,7 @@
                 </div>
             </div>
         </a>
-
+        @if(auth()->user()->hasPermission('loan_disburse') || auth()->user()->hasPermission('repayment_schedule'))
         <a href="{{ route('disbursements-and-repayments') }}" 
             class="relative flex items-center gap-2 px-3 py-1.5 text-sm text-gray-600 hover:bg-gray-100 rounded-md group {{ request()->routeIs('disbursements-and-repayments') ? 'bg-neutral-800 text-white' : '' }}" 
             :class="{ 'justify-center': isCollapsed }">
@@ -71,7 +71,7 @@
                 </div>
             </div>
         </a>
-
+        @endif
         <a href="{{ route('loan-applications') }}" 
             class="relative flex items-center gap-2 px-3 py-1.5 text-sm text-gray-600 hover:bg-gray-100 rounded-md group {{ request()->routeIs('loan-applications') ? 'bg-neutral-800 text-white' : '' }}" 
             :class="{ 'justify-center': isCollapsed }">

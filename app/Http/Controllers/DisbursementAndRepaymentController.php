@@ -16,6 +16,10 @@ class DisbursementAndRepaymentController extends Controller
 
     public function index()
     {
+        if(!auth()->user()->hasPermission('loan_disburse') || !auth()->user()->hasPermission('repayment_schedule'))
+        {
+            return redirect()->route('dashboard')->with('toast', ['type' => 'error', 'message' => 'You do not have permission to access this page']);
+        }
         $disbursements = $this->service->getDisbursements([]);
         $loanApplications = $this->service->getApprovedLoans();
         $repayments = $this->service->getRepayments([]);

@@ -17,6 +17,10 @@ class DisbursementController extends Controller
     //
     public function index(Request $request)
     {
+        if(!auth()->user()->hasPermission('loan_disburse'))
+        {
+            return redirect()->route('dashboard')->with('toast', ['type' => 'error', 'message' => 'You do not have permission to access this page']);
+        }
         $type = 'New';
         $loanApplications = $this->service->getApprovedLoans();
         return view('pages.disbursements.index', compact('type', 'loanApplications'));
@@ -24,6 +28,10 @@ class DisbursementController extends Controller
 
     public function edit(Request $request, $id)
     {
+        if(!auth()->user()->hasPermission('loan_status'))
+        {
+            return redirect()->route('dashboard')->with('toast', ['type' => 'error', 'message' => 'You do not have permission to access this page']);
+        }
         $type = 'Edit';
         $loanApplications = $this->service->getLoans($id);
         $disbursement = $this->service->getDisbursement($id);
