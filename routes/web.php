@@ -49,6 +49,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/view/{application_id}/loan-applications', 'view')->name('loan-applications.view');
         Route::post('/loan-applications', 'store')->name('loan-applcations.store');
         Route::post('/loan-applications/{id}', 'update')->name('loan-applications.update');
+        Route::post('/loan-applications/delete/{id}', 'destroy')->name('loan-applications.destroy');
     });
 
     Route::controller(DisbursementController::class)->group(function () {

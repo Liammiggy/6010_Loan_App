@@ -97,4 +97,10 @@ class LoanApplicationController extends Controller
         return response()->json([], 200);
 
     }
+
+    public function destroy($id) {
+        $this->service->delete($id);
+        session()->flash('toast', ['type' => 'success', 'message' => 'Loan Application deleted successfully']);
+        return response()->json([], 200);
+    }
 }

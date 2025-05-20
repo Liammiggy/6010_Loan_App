@@ -67,8 +67,13 @@
     }
 
     function deleteLoanType(id) {
-        if (confirm('Are you sure you want to delete this loan type?')) {
-            fetch(`/loan-types/delete/${id}`, {
+        showAlert({
+            title: 'Delete Loan Type',
+            message: 'Are you sure you want to delete this loan type? This action cannot be undone.',
+            confirmText: 'Delete',
+            cancelText: 'Cancel',
+            onConfirm: function() {
+                fetch(`/loan-types/delete/${id}`, {
                 method: 'POST',
                 headers: {
                     'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
@@ -85,7 +90,8 @@
                 console.error('Error:', error);
                 alert('Failed to save loan. Please try again.');
             });
-        }
+            }
+        })
     }
 
     // Form Submission

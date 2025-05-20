@@ -38,10 +38,31 @@
     }
 
     function deleteApplication(id) {
-        if (confirm('Are you sure you want to delete this loan application?')) {
-            console.log('Delete application:', id);
-            // Implement delete functionality
-        }
+        showAlert({
+            title: 'Delete Loan Application',
+            message: 'Are you sure you want to delete this loan application? This action cannot be undone.',
+            confirmText: 'Delete',
+            cancelText: 'Cancel',
+            onConfirm: function() {
+                fetch(`/loan-applications/delete/${id}`, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                    }
+                })
+                .then(response => {
+                    if (response.ok) {
+                        window.location.reload();
+                    } else {
+                        throw new Error('Failed to delete loan application');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Failed to delete loan application. Please try again.');
+                });
+            }
+        });
     }
 
     document.getElementById('processApplicationForm').addEventListener('submit', function(e) {
